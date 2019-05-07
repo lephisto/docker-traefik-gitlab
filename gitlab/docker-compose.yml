@@ -15,7 +15,7 @@ services:
 
   postgresql:
     restart: always
-    image: sameersbn/postgresql:9.6-2
+    image: sameersbn/postgresql:10
     networks:
       - gitlab
     volumes:
@@ -30,7 +30,7 @@ services:
 
   gitlab:
     restart: always
-    image: sameersbn/gitlab:9.0.2
+    image: sameersbn/gitlab:11.10.4
     depends_on:
     - redis
     - postgresql
@@ -97,6 +97,22 @@ services:
     - IMAP_PASS=password
     - IMAP_SSL=true
     - IMAP_STARTTLS=false
+
+    - LDAP_ENABLED=false
+    - LDAP_LABEL=LDAP
+    - LDAP_HOST=ldap.yourldapserver.com
+    - LDAP_PORT=636
+    - LDAP_METHOD=simple_tls
+    - LDAP_UID=cn
+    - LDAP_BIND_DN=cn=login,dc=ldap,dc=yourldapserver,dc=com
+    - LDAP_USER_FILTER=(memberOf=cn=gitlab,ou=groups,dc=ldap,dc=yourldapserver,dc=com)
+    - LDAP_PASS=<ldappasswd>
+    - LDAP_ACTIVE_DIRECTORY=false
+    - LDAP_BASE=ou=people,dc=ldap,dc=yourldapserver,dc=com
+    - LDAP_USER_ATTRIBUTE_NAME=displayName
+    - LDAP_USER_ATTRIBUTE_USERNAME=cn
+    - LDAP_USER_ATTRIBUTE_FIRSTNAME=givenName
+    - LDAP_USER_ATTRIBUTE_LASTNAME=sn
 
     - OAUTH_ENABLED=false
     - OAUTH_AUTO_SIGN_IN_WITH_PROVIDER=
